@@ -98,6 +98,7 @@ class AlchemicalStorage:
         :return: Content as a string.
         """
         return_str = "Content:\n"
+        a = ""
         element_count = 0
         used_elements = []
         for i in self.storage:
