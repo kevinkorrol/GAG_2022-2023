@@ -24,7 +24,7 @@ class AlchemicalStorage:
 
         You will likely need to add something here, maybe a list?
         """
-        self.lst = []
+        self.storage = []
 
     def add(self, element: AlchemicalElement):
         """
@@ -35,7 +35,7 @@ class AlchemicalStorage:
         :param element: Input object to add to storage.
         """
         if isinstance(element, AlchemicalElement):
-            self.lst.append(element)
+            self.storage.append(element)
         else:
             raise TypeError("Element does not belong in the  AlchemicalElement class")
 
@@ -49,9 +49,10 @@ class AlchemicalStorage:
         :param element_name: Name of the element to remove.
         :return: The removed AlchemicalElement object or None.
         """
-        for i in self.lst:
-            if inistance(i.lst, AlchemicalElement):
-                
+        for i in self.storage:
+            if inistance(i, AlchemicalElement):
+                self.storage.pop(self.lst[i])
+                return i
         return None
 
     def extract(self) -> list[AlchemicalElement]:
@@ -71,7 +72,11 @@ class AlchemicalStorage:
 
         :return: A list of all of the elements that were previously in the storage.
         """
-        return []
+        lst = []
+        for i in self.storage:
+            lst.append(AlchemicalElement(i))
+            pop(i) 
+        return lst
 
     def get_content(self) -> str:
         """
@@ -92,8 +97,16 @@ class AlchemicalStorage:
 
         :return: Content as a string.
         """
-        return ''
-
+        return_str = "Content:\n"
+        element_count = 0
+        used_elements = []
+        for i in self.storage:
+            if i not in used_elements:
+                element_count = self.storage.count(i)
+                used_elements.append(used_elements)
+                return_str += f"{i} x {element_count}\n"
+            else:
+                pass
 
 if __name__ == '__main__':
     element_one = AlchemicalElement('Fire')
