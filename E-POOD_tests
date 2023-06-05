@@ -1,0 +1,230 @@
+from E-POOd import Client, Item, Basket, Store, NegativeQuantity
+
+def test_create_client_and_check_clients_type_regular():
+    "Creates a client named Kevin, who is a regular client, and checks his type"
+    client = Client("Kevin", "regular", 20)
+
+    expected = "regular"
+
+    assert client.client_type == expected, "Client types do not match"
+
+
+def test_create_client_and_check_clients_type_golden():
+    "Creates a client named Kevin, who is a golden client, and checks his type"
+    client = Client("Kevin", "golden", 20)
+
+    expected = "golden"
+
+    assert client.client_type == expected, "Client types do not match"
+    
+
+def test_create_item_from_Item_class_and_checks_price():
+    "Creates an Item object with price and quantity"
+    item = Item("Milk", 1, 10)
+
+    expected = 1
+
+    assert item.price == expected
+
+
+def test_create_item_from_Item_class_and_checks_quantity():
+    "Creates an Item object with price and quantity"
+    item = Item("Milk", 1, 10)
+
+    expected = 10
+
+    assert item.quantity == expected
+
+
+def test_create_item_from_Item_class_and_checks_if_it_can_be_bought_can_buy():
+    "Creates an Item object with price and quantity, checks if it can be bought"
+    item = Item("Milk", 1, 10)
+
+    expected = True
+
+    assert item.can_buy() == expected
+
+
+def test_create_item_from_Item_class_and_checks_if_it_can_be_bought_can_not_buy():
+    "Creates an Item object with price and quantity, checks if it can be bought"
+    item = Item("Milk", 1, 0)
+
+    expected = False
+
+    assert item.can_buy() == expected
+
+
+def test_create_basket():
+    "Create a shopping basket for the client and adds items to the basket"
+    basket = Basket()
+    basket.add(Item("Bread", 2, 50), 2)
+    basket.add(Item("Milk", 1, 50), 4)
+    basket.add(Item("Candy", 3, 50), 4)
+
+    expected = 3
+
+    assert len(basket.storage) == expected
+
+
+def test_create_basket_and_calculate_cost():
+    "Calculates the cost of the current basket"
+    basket = Basket()
+    basket.add(Item("Bread", 2, 50), 2)
+    basket.add(Item("Milk", 1, 50), 4)
+    basket.add(Item("Candy", 3, 50), 4)
+
+    expected = 20
+
+    assert basket.calculate_cost() == expected
+
+
+def test_remove_items_from_basket():
+    "Removes a certain item from the basket"
+    basket = Basket()
+    basket.add(Item("Bread", 2, 50), 2)
+    basket.add(Item("Milk", 1, 50), 4)
+    basket.add(Item("Candy", 3, 50), 4)
+    basket.remove("Bread")
+
+    expected = 2
+
+    assert len(basket.storage) == expected
+
+
+def test_change_item_quantities_in_basket():
+    "Changes certain items quantity"
+    basket = Basket()
+    basket.add(Item("Bread", 2, 50), 2)
+    basket.add(Item("Milk", 1, 50), 4)
+    basket.add(Item("Candy", 3, 50), 4)
+    basket.change_quantity("Milk", 5)
+    print(basket)
+
+
+def test_remove_items_from_basket_and_calculate_new_cost():
+    "Removes item from basket and recalculates the cost"
+    basket = Basket()
+    basket.add(Item("Bread", 2, 50), 2)
+    basket.add(Item("Milk", 1, 50), 4)
+    basket.add(Item("Candy", 3, 50), 4)
+    basket.remove("Bread")
+
+    expected = 16
+
+    assert basket.calculate_cost() == expected
+
+
+def test_change_item_quantities_in_basket_and_calculate_new_cost():
+    "Changes item quantity in the basket and recalculates the cost"
+    basket = Basket()
+    basket.add(Item("Bread", 2, 50), 2)
+    basket.add(Item("Milk", 1, 50), 4)
+    basket.add(Item("Candy", 3, 50), 4)
+    basket.change_quantity("Milk", 5)
+
+    expected = 21
+
+    assert basket.calculate_cost() == expected
+    
+
+def test_create_store_with_inventory_and_customer_info(client, item):
+    "Create store object"
+    store = Store()
+    store.add_item_to_inventory(item)
+    store.add_customer_info(client)
+
+    print(store.inventory)
+    print(store.registered_clients)
+    
+
+def test_make_a_purchase():
+    "Making a purchase from the store"
+    client2 = Client("Kevin", "golden", 10)
+    client2.basket.add(Item("Leib", 1, 10), 2)
+    client2.basket.add(Item("Piim", 2, 10), 3)
+    client2.basket.add(Item("Sai", 2, 10), 4)
+    store2 = Store()
+    store2.add_item_to_inventory(Item("Leib", 1, 100))
+    store2.add_item_to_inventory(Item("Piim", 2, 100))
+    store2.add_item_to_inventory(Item("Sai", 3, 100))
+    store2.add_customer_info(client2)
+    client2.make_purchase(store2)
+
+    print(client2.purchase_history())
+    print(client2.money)
+    print(store2.inventory)
+    print(store2.registered_clients)
+
+
+def test_make_a_purchase_not_enough_money():
+    "Making a purchase from the store, but the client has no money"
+    client2 = Client("Kevin", "golden", 10)
+    client2.basket.add(Item("Leib", 1, 10), 2)
+    client2.basket.add(Item("Piim", 2, 10), 3)
+    client2.basket.add(Item("Sai", 2, 10), 4)
+    store2 = Store()
+    store2.add_item_to_inventory(Item("Leib", 1, 100))
+    store2.add_item_to_inventory(Item("Piim", 2, 100))
+    store2.add_item_to_inventory(Item("Sai", 3, 100))
+    store2.add_customer_info(client2)
+    client2.make_purchase(store2)
+
+    print(client2.purchase_history())
+    print(client2.money)
+    print(store2.inventory)
+    print(store2.registered_clients)
+
+
+def test_make_a_purchase_not_enough_items_in_store():
+    "Making a purchase from the store, but the store has not enough items"
+    client2 = Client("Kevin", "golden", 100)
+    client2.basket.add(Item("Leib", 1, 10), 200)
+    client2.basket.add(Item("Piim", 2, 10), 3)
+    client2.basket.add(Item("Sai", 2, 10), 4)
+    store2 = Store()
+    store2.add_item_to_inventory(Item("Leib", 1, 100))
+    store2.add_item_to_inventory(Item("Piim", 2, 100))
+    store2.add_item_to_inventory(Item("Sai", 3, 100))
+    store2.add_customer_info(client2)
+    client2.make_purchase(store2)
+
+    print(client2.purchase_history())
+    print(client2.money)
+    print(store2.inventory)
+    print(store2.registered_clients)
+
+
+def test_make_a_purchase_regular_client():
+    "Making a purchase from the store, the client is a regular type"
+    client2 = Client("Kevin", "regular", 100)
+    client2.basket.add(Item("Leib", 1, 10), 2)
+    client2.basket.add(Item("Piim", 2, 10), 3)
+    client2.basket.add(Item("Sai", 2, 10), 4)
+    store2 = Store()
+    store2.add_item_to_inventory(Item("Leib", 1, 100))
+    store2.add_item_to_inventory(Item("Piim", 2, 100))
+    store2.add_item_to_inventory(Item("Sai", 3, 100))
+    store2.add_customer_info(client2)
+    client2.make_purchase(store2)
+
+    expected = 84
+
+    assert client2.money == expected
+
+
+def test_make_a_purchase_golden_client():
+    "Making a purchase from the store, the client is a golden type"
+    client2 = Client("Kevin", "golden", 100)
+    client2.basket.add(Item("Leib", 1, 10), 2)
+    client2.basket.add(Item("Piim", 2, 10), 3)
+    client2.basket.add(Item("Sai", 2, 10), 4)
+    store2 = Store()
+    store2.add_item_to_inventory(Item("Leib", 1, 100))
+    store2.add_item_to_inventory(Item("Piim", 2, 100))
+    store2.add_item_to_inventory(Item("Sai", 3, 100))
+    store2.add_customer_info(client2)
+    client2.make_purchase(store2)
+
+    expected = 85.6
+
+    assert client2.money == expected
