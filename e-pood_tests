@@ -1,4 +1,4 @@
-from E-POOd import Client, Item, Basket, Store, NegativeQuantity
+from e-pood import Client, Item, Basket, Store, NegativeQuantity
 
 def test_create_client_and_check_clients_type_regular():
     "Creates a client named Kevin, who is a regular client, and checks his type"
